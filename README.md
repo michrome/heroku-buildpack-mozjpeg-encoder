@@ -9,7 +9,7 @@ A [buildpack](https://devcenter.heroku.com/articles/buildpacks) that reduces the
     $ heroku config:add BUILDPACK_URL=https://github.com/heroku/heroku-buildpack-multi.git
     ```
 
-2. Create text file named `.buildpacks` in the root of your application. Its contents should be:
+2. Create a file named `.buildpacks` in the root of your application. Its contents should be:
     1. For Ruby and Rails
     
         ````
