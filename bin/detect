@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# this buildpack is valid for apps containing jpg or jpeg files
+if [ $(find $1 -iname '*.jpg' -o -iname '*.jpeg' | wc -l) -gt 0 ]; then
+  echo "mozjpeg - Improved JPEG encoder"
+  exit 0
+else
+  exit 1
+fi

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+build_dir=$1
+working_dir=`pwd`
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+echo "-----> Installing mozjpeg"
+# Use the binaries supplied with this buildpack
+chmod +x $working_dir/vendor/bin/cjpeg
+export PATH=$PATH:$working_dir/vendor/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$working_dir/vendor/lib
+
+echo "-----> Running mozjpeg on…"
+find $build_dir -iname '*.jpg' -o -iname '*.jpeg' | while read filename; do
+  # Echo the file name without the build directory
+  echo ${filename#$build_dir} | indent
+  # Add an arbitrary '307fcc21ef-' prefix to the original file name
+  # e.g my.jpeg is renamed to 307fcc21ef-my.jpeg
+  jpeg_dir=`dirname $filename`
+  jpeg_basename=`basename $filename`
+  prefixed_filename="$jpeg_dir/307fcc21ef-$jpeg_basename"
+  mv $filename $prefixed_filename
+  # Run mozjpeg
+  cjpeg $prefixed_filename >$filename
+  # Remove the original file
+  rm $prefixed_filename
+done
